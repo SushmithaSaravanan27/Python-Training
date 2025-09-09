@@ -1,0 +1,7 @@
+l = int(input())
+n = int(input())
+r = int(input())
+if l < n < r:
+    print("yes")
+else:
+    print("no")
