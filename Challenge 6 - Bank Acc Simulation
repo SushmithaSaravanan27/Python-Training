@@ -1,1 +1,15 @@
-
+balance = 1000
+def deposit(amount):
+    global balance
+    balance = balance + amount
+    print("Deposit", amount, "Balance:", balance)
+def withdraw(amount):
+    global balance
+    if amount <= balance:
+        balance = balance - amount
+        print("Withdraw", amount, "Balance:", balance)
+    else:
+        print("Withdraw", amount, "Insufficient funds! Balance:", balance)
+deposit(200)
+withdraw(500)
+withdraw(1000)
