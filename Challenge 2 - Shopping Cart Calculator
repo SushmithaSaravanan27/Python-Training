@@ -1,1 +1,12 @@
-
+item1 = 45
+item2 = 30
+item3 = 50
+total = item1 + item2 + item3
+if total > 100:
+    discount = total * 0.10
+else:
+    discount = 0
+ftotal = total - discount
+print("Cart Total:", total)
+print("Discount Applied:", discount)
+print("Final Total:", ftotal)
