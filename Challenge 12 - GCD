@@ -1,0 +1,8 @@
+import math
+numbers = list(map(int, input().split()))
+n = numbers[0]
+m = numbers[1]
+if n > 0 and m > 0:
+    print(math.gcd(n, m))
+else:
+    print(-1)
