@@ -1,0 +1,24 @@
+cart_items = {}
+cart_price = {}
+def add_item(name, quantity, price):
+    cart_items[name] = quantity
+    cart_price[name] = price
+    display_elements()
+def display_elements():
+    print("Cart Items:", cart_items)
+    print("Cart Prices:", cart_price)
+def remove_element(item):
+    if item in cart_items:
+        cart_items.pop(item)
+        cart_price.pop(item)
+        print(f"{item} removed from cart.")
+    else:
+        print(f"{item} not found in cart.")
+def calculate_total():
+    total = sum(cart_items[i] * cart_price[i] for i in cart_items)
+    return total
+def bill():
+    print("\n--- Final Bill ---")
+    for item in cart_items:
+        print(f"{item} - Quantity: {cart_items[item]}, Price: {cart_price[item]}, Subtotal: {cart_items[item] * cart_price[item]}")
+    print(f"Total Amount: {calculate_total()}")
