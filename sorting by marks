@@ -1,0 +1,3 @@
+employee=[("Asha",85),("Bala",92),("Chitra",78)]
+result=sorted(employee,key=lambda x:x[1],reverse=True)
+print(result)
