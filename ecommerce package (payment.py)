@@ -1,0 +1,15 @@
+def pay(amount):
+    print("\n Payment")
+    print(f"Total Amount: {amount}")
+    print("1. Cash")
+    print("2. Card")
+    print("3. UPI")
+    choice = int(input("Choose method: "))
+    if choice == 1:
+        print("Payment successful")
+    elif choice == 2:
+        print("Payment successful")
+    elif choice == 3:
+        print("Payment successful.")
+    else:
+        print("Invalid choice. Payment failed.")
