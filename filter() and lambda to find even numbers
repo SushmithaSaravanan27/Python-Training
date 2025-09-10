@@ -1,0 +1,3 @@
+player_ids=[101,102,103,104,105]
+result=list(filter(lambda x:x%2!=0,player_ids))
+print(result)
