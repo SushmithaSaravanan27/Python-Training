@@ -1,0 +1,73 @@
+# Online Course Enrollment System (course_enrollment.py)
+# Course Class
+class Course:
+    def __init__(self, name, code, credits, fee):
+        self.name = name
+        self.code = code
+        self.credits = credits
+        self.__fee = fee   # Encapsulation (private attribute)
+
+    def get_fee(self):
+        return self.__fee
+
+    def display_details(self):
+        print(f"Course: {self.name}, Code: {self.code}, Credits: {self.credits}, Fee: ${self.__fee}")
+# Student Class
+class Student:
+    def __init__(self, name):
+        self.name = name
+        self.courses = []   # List of enrolled courses
+    def enroll_course(self, course):
+        if course not in self.courses:
+            self.courses.append(course)
+            # Dynamic attribute (last enrolled course)
+            self.last_enrolled_course = course.name
+            print(f"Enrolled '{course.name}' for {self.name}.")
+        else:
+            print(f"{self.name} is already enrolled in '{course.name}'.")
+    def drop_course(self, course):
+        if course in self.courses:
+            self.courses.remove(course)
+            print(f"Dropped '{course.name}' from {self.name}'s courses.")
+        else:
+            print(f"{self.name} is not enrolled in '{course.name}'.")
+    def calculate_total_credits(self):
+        return sum(course.credits for course in self.courses)
+    def calculate_fees(self):
+        return sum(course.get_fee() for course in self.courses)
+# Premium Student (Inheritance + Polymorphism)
+class PremiumStudent(Student):
+    def calculate_fees(self):
+        total = super().calculate_fees()
+        discount = total * 0.20  # 20% discount
+        return total - discount
+# Main Program
+if __name__ == "__main__":
+    # Create some courses
+    python_course = Course("Python Programming", "C101", 3, 500)
+    data_science = Course("Data Science 101", "C102", 4, 700)
+    ai_course = Course("AI Fundamentals", "C103", 5, 900)
+
+    # Create students
+    alice = Student("Alice")
+    bob = PremiumStudent("Bob")
+
+    # Enroll students in courses
+    alice.enroll_course(python_course)
+    alice.enroll_course(data_science)
+    alice.enroll_course(ai_course)
+
+    bob.enroll_course(python_course)
+    bob.enroll_course(data_science)
+    bob.enroll_course(ai_course)
+
+    # Drop a course for Alice
+    alice.drop_course(data_science)
+
+    # Display totals
+    print(f"\n{alice.name}'s total credits: {alice.calculate_total_credits()}, Fees: ${alice.calculate_fees()}")
+    print(f"{bob.name}'s total credits: {bob.calculate_total_credits()}, Fees with discount: ${bob.calculate_fees()}")
+
+    # Show dynamic attribute usage
+    print(f"\nLast enrolled course for {alice.name}: {alice.last_enrolled_course}")
+    print(f"Last enrolled course for {bob.name}: {bob.last_enrolled_course}")
