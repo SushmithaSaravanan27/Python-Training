@@ -1,0 +1,91 @@
+# Online Food Delivery System
+# FoodItem Class
+class FoodItem:
+    def __init__(self, name, price, available=True):
+        self.name = name
+        self.price = price
+        self.available = available
+
+    def display_details(self):
+        status = "Available" if self.available else "Not Available"
+        print(f"Food Item: {self.name}, Price: ${self.price}, Status: {status}")
+# Order Class
+class Order:
+    def __init__(self):
+        self.items = []  # list of food items
+
+    def add_item(self, food_item):
+        if food_item.available:
+            self.items.append(food_item)
+            self.last_ordered_item = food_item.name  # dynamic attribute
+            print(f"Added '{food_item.name}' to order.")
+        else:
+            print(f"Sorry, '{food_item.name}' is not available.")
+
+    def remove_item(self, food_item):
+        if food_item in self.items:
+            self.items.remove(food_item)
+            print(f"Removed '{food_item.name}' from order.")
+        else:
+            print(f"{food_item.name} not found in order.")
+
+    def display_order(self):
+        if not self.items:
+            print("Order is empty.")
+        else:
+            print("Order items:")
+            for item in self.items:
+                print(f"- {item.name} - ${item.price}")
+
+    def calculate_total(self):
+        return sum(item.price for item in self.items)
+# User Class
+class User:
+    def __init__(self, name):
+        self.name = name
+        self.order = Order()
+
+    def calculate_total(self):
+        return self.order.calculate_total()
+# PremiumUser (Inheritance + Polymorphism)
+class PremiumUser(User):
+    def calculate_total(self):
+        total = super().calculate_total()
+        discount = total * 0.15  # 15% discount
+        return total - discount
+# Main Program
+if __name__ == "__main__":
+    # Create food items
+    pizza = FoodItem("Pizza", 300, True)
+    burger = FoodItem("Burger", 150, True)
+    pasta = FoodItem("Pasta", 200, False)  # not available
+
+    # Display food details
+    pizza.display_details()
+    burger.display_details()
+    pasta.display_details()
+
+    # Create users
+    john = User("John")
+    emma = PremiumUser("Emma")
+
+    # John ordering food
+    john.order.add_item(pizza)
+    john.order.add_item(burger)
+    john.order.add_item(pasta)  # should fail (not available)
+    john.order.display_order()
+    john.order.remove_item(burger)
+    john.order.display_order()
+
+    # Emma ordering food
+    emma.order.add_item(pizza)
+    emma.order.add_item(burger)
+    emma.order.display_order()
+
+    # Totals
+    print(f"\n{john.name}'s order total: ${john.calculate_total()}")
+    print(f"{emma.name}'s order total with discount: ${emma.calculate_total()}")
+
+    # Show dynamic attribute usage
+    print(f"\nLast ordered item for {john.name}: {john.order.last_ordered_item}")
+    print(f"Last ordered item for {emma.name}: {emma.order.last_ordered_item}")
