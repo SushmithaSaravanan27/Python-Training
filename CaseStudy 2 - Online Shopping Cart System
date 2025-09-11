@@ -1,0 +1,92 @@
+# Online Shopping Cart System (shopping_cart.py)
+# Product Class
+class Product:
+    def __init__(self, name, price, stock):
+        self.name = name
+        self.price = price
+        self.stock = stock
+
+    def display_details(self):
+        print(f"Product: {self.name}, Price: ${self.price}, Stock: {self.stock}")
+# Cart Class
+class Cart:
+    def __init__(self):
+        self.items = []  # list of (product, quantity)
+
+    def add_product(self, product, quantity):
+        if product.stock >= quantity:
+            self.items.append((product, quantity))
+            product.stock -= quantity  # decrease stock
+            self.last_added_item = product.name  # dynamic attribute
+            print(f"Added '{product.name}' (x{quantity}) to cart.")
+        else:
+            print(f"Not enough stock for {product.name}. Available: {product.stock}")
+
+    def remove_product(self, product):
+        for item in self.items:
+            if item[0] == product:
+                self.items.remove(item)
+                product.stock += item[1]  # restore stock
+                print(f"Removed '{product.name}' from cart.")
+                return
+        print(f"{product.name} not found in cart.")
+
+    def display_cart(self):
+        if not self.items:
+            print("Cart is empty.")
+        else:
+            print("Cart items:")
+            for product, qty in self.items:
+                print(f"- {product.name} (x{qty}) - ${product.price * qty}")
+
+    def calculate_total(self):
+        return sum(product.price * qty for product, qty in self.items)
+# User Class
+class User:
+    def __init__(self, name):
+        self.name = name
+        self.cart = Cart()
+
+    def calculate_total(self):
+        return self.cart.calculate_total()
+# Premium User (Inheritance + Polymorphism)
+class PremiumUser(User):
+    def calculate_total(self):
+        total = super().calculate_total()
+        discount = total * 0.10  # 10% discount
+        return total - discount
+# Main Program
+if __name__ == "__main__":
+    # Create some products
+    laptop = Product("Laptop", 1000, 5)
+    mouse = Product("Mouse", 50, 10)
+    keyboard = Product("Keyboard", 100, 7)
+
+    # Display product details
+    laptop.display_details()
+    mouse.display_details()
+    keyboard.display_details()
+
+    # Create users
+    alice = User("Alice")
+    bob = PremiumUser("Bob")
+
+    # Alice shopping
+    alice.cart.add_product(laptop, 1)
+    alice.cart.add_product(mouse, 2)
+    alice.cart.display_cart()
+    alice.cart.remove_product(mouse)
+    alice.cart.display_cart()
+
+    # Bob shopping
+    bob.cart.add_product(laptop, 1)
+    bob.cart.add_product(keyboard, 3)
+    bob.cart.display_cart()
+
+    # Totals
+    print(f"\n{alice.name}'s cart total: ${alice.calculate_total()}")
+    print(f"{bob.name}'s cart total with discount: ${bob.calculate_total()}")
+
+    # Show dynamic attribute usage
+    print(f"\nLast added item in Alice's cart: {alice.cart.last_added_item}")
+    print(f"Last added item in Bob's cart: {bob.cart.last_added_item}")
