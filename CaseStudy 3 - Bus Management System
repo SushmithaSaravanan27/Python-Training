@@ -1,0 +1,129 @@
+#bus_management.py
+# Passenger Class
+class Passenger:
+    def __init__(self, name, ticket_number, destination):
+        self.name = name
+        self.ticket_number = ticket_number
+        self.destination = destination
+
+    def display_details(self):
+        print(f"Passenger: {self.name}, Ticket: {self.ticket_number}, Destination: {self.destination}")
+# Driver Class
+class Driver:
+    def __init__(self, name, employee_id, license_number):
+        self.name = name
+        self.employee_id = employee_id
+        self.license_number = license_number
+
+    def display_details(self):
+        print(f"Driver: {self.name}, ID: {self.employee_id}, License: {self.license_number}")
+# Route Class
+class Route:
+    def __init__(self, route_name, start, end, stops=None):
+        self.route_name = route_name
+        self.start = start
+        self.end = end
+        self.stops = stops if stops else []
+
+    def display_route(self):
+        print(f"Route: {self.route_name}, From {self.start} to {self.end}")
+        if self.stops:
+            print("Stops:", ", ".join(self.stops))
+# Bus Class
+class Bus:
+    def __init__(self, bus_number, capacity, route=None):
+        self.bus_number = bus_number
+        self.capacity = capacity
+        self.__passengers = []  # encapsulation
+        self.driver = None
+        self.route = route
+
+    # Assign a driver
+    def assign_driver(self, driver):
+        self.driver = driver
+        print(f"Driver {driver.name} assigned to Bus {self.bus_number}")
+
+    # Add passenger
+    def add_passenger(self, passenger):
+        if len(self.__passengers) < self.capacity:
+            self.__passengers.append(passenger)
+            print(f"Passenger {passenger.name} boarded Bus {self.bus_number}")
+        else:
+            print("Bus is full! Cannot add more passengers.")
+
+    # Remove passenger
+    def remove_passenger(self, passenger_name):
+        for p in self.__passengers:
+            if p.name == passenger_name:
+                self.__passengers.remove(p)
+                print(f"Passenger {p.name} left Bus {self.bus_number}")
+                return
+        print(f"No passenger named {passenger_name} found on Bus {self.bus_number}")
+
+    # Start trip
+    def start_trip(self):
+        if not self.driver:
+            print(f"Bus {self.bus_number} cannot start: No driver assigned!")
+            return
+        if not self.route:
+            print(f"Bus {self.bus_number} cannot start: No route assigned!")
+            return
+        print(f"\n🚍 Starting trip for Bus {self.bus_number}")
+        print(f"Driver: {self.driver.name}")
+        self.route.display_route()
+        print(f"Passengers on board: {[p.name for p in self.__passengers]}")
+        print(f"Seats available: {self.capacity - len(self.__passengers)}")
+
+    # End trip
+    def end_trip(self):
+        print(f"\nTrip ended for Bus {self.bus_number}. Passengers have left the bus.")
+        self.__passengers.clear()
+
+    # Display bus status
+    def display_status(self):
+        print(f"\nBus {self.bus_number}, Capacity: {self.capacity}")
+        print(f"Driver: {self.driver.name if self.driver else 'No driver assigned'}")
+        print(f"Route: {self.route.route_name if self.route else 'No route assigned'}")
+        print(f"Passengers count: {len(self.__passengers)}")
+        if self.__passengers:
+            print("Passengers:", ", ".join([p.name for p in self.__passengers]))
+
+# Main Program 
+if __name__ == "__main__":
+    # Create Route
+    route1 = Route("Downtown-Uptown", "Downtown", "Uptown", ["Central Park", "Main Square"])
+
+    # Create Driver
+    driver1 = Driver("John", "D001", "LIC12345")
+
+    # Create Bus
+    bus101 = Bus("101", 40, route1)
+
+    # Assign driver
+    bus101.assign_driver(driver1)
+
+    # Create Passengers
+    p1 = Passenger("Alice", "T001", "Central Park")
+    p2 = Passenger("Bob", "T002", "Main Square")
+    p3 = Passenger("Charlie", "T003", "Uptown")
+
+    # Passengers board
+    bus101.add_passenger(p1)
+    bus101.add_passenger(p2)
+    bus101.add_passenger(p3)
+
+    # Display bus status
+    bus101.display_status()
+
+    # Start trip
+    bus101.start_trip()
+
+    # Passengers leave
+    bus101.remove_passenger("Alice")
+    bus101.remove_passenger("Bob")
+
+    # End trip
+    bus101.end_trip()
+
+    # Final status
+    bus101.display_status()
